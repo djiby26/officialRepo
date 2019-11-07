@@ -4,6 +4,12 @@ swiftmailer:
     auth_mode: login
     port: 465
     host: smtp.gmail.com
-    username: 'dijatou26@gmail.com'
-    password: 'KHADY1993'
+    username: 'cobaye2019@gmail.com'
+    password: 'Djiby@1997'
+    encryption: ssl
     spool: { type: 'memory' }
+    stream_options:
+        ssl:
+            allow_self_signed: true
+            verify_peer: false
+            verify_peer_name: false

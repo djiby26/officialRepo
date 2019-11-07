@@ -22,7 +22,7 @@ security:
             anonymous: ~
             form_login:
                 check_path: /api/login_check
-                # provider: fos_userbundle
+                provider: fos_userbundle
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
                 default_target_path: /api
