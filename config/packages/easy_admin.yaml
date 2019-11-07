@@ -1,0 +1,165 @@
+easy_admin:
+
+  formats:
+    number: '%.00f'
+
+  list:
+    batch_actions: ['delete']
+
+  design:
+    menu:
+      - label: 'Mon Profile'
+        icon: 'users'
+        children:
+          - { label: 'Modifier email', route: fos_user_profile_edit }
+          - { label: 'Changer mot de passe' , route: fos_user_change_password }
+      - { entity: User , permission: 'ROLE_SUPER_ADMIN'}
+      - { entity: Restaurant }
+      - { entity: Menu }
+      - { entity: Commande }
+      # - { entity: Categorie }
+    
+    brand_color: '#1ABC9C'
+    rtl: false
+  site_name: 'Management area'
+
+  entities:
+    Menu:
+      class: App\Entity\Menu
+      new:
+        title: 'Ajouter un menu'
+        fields:
+          - nom
+          - detail
+          - { property: 'prix' , type: 'integer' }
+          - typeMenu
+          - etat
+          - { property: 'imageFile', type: 'vich_image', base_path: '%app.path.restaurant_images%',template: 'vich_uploader_image.html.twig' }
+          - restaurant
+      edit:
+        title: 'Modifier un menu'
+        fields:
+          - nom
+          - detail
+          - prix
+          - typeMenu
+          - etat
+          - { property: 'imageFile', type: 'vich_image', base_path: '%app.path.restaurant_images%',template: 'vich_uploader_image.html.twig' }
+          - restaurant
+      list:
+        actions:
+          - { name: 'show', label: '', icon: 'search' }
+          - { name: 'edit', label: '', icon: 'edit' }
+          - { name: 'delete', label: '', icon: 'trash' }
+        fields:
+        - id
+        - nom
+        - detail
+        - prix
+        - typeMenu
+        - { property: 'etat', label: 'Disponibilite'}
+        - { property: 'image', type: 'image', base_path: '%app.path.restaurant_images%' }
+        - restaurant
+
+    Restaurant:
+      label: Restaurant
+      # controller: App\Controller\RestaurantController
+      class: App\Entity\Restaurant
+      new:
+        item_permission: 'ROLE_SUPER_ADMIN'
+        title: 'Ajouter un restaurant'
+        fields:
+          - nom
+          - description
+          - adresse
+          - telephone
+          - { property: 'imageFile', type: 'vich_image', base_path: '%app.path.restaurant_images%',template: 'vich_uploader_image.html.twig' }
+          - menu
+          - administrateur
+      edit:
+        title: 'Modifier restaurant'
+        fields:
+          - nom
+          - description
+          - adresse
+          - telephone
+          - { property: 'imageFile', type: 'vich_image', base_path: '%app.path.restaurant_images%'}
+          - menu
+          - administrateur
+        list:
+          actions:
+            - { name: 'show', label: '', icon: 'search' }
+            - { name: 'edit', label: '', icon: 'edit' }
+            - { name: 'delete', label: '', icon: 'trash' }
+          fields:
+            - nom
+            - description
+            - adresse
+            - telephone
+            - menu            
+            - { property: 'image', type: 'image', base_path: '%app.path.restaurant_images%' }
+            - administrateur
+    User:
+      icon: user
+      label: Utilisateur
+      class: App\Entity\User
+      batch_actions: ['-delete']
+      form:
+        item_permission: 'ROLE_SUPER_ADMIN'
+        fields:
+          - username
+          - email
+          # - password
+          - { property: 'plainPassword', type: 'text', type_options: { required: false } }
+          - phoneNumber
+          - enabled
+          - lastLogin
+          # - { property: 'roles', type: 'choice', type_options: { multiple: true, mapped: true , expanded: false , choices: { 'ADMIN': 'ROLE_USER', 'SUPER ADMIN': 'ROLE_SUPER_ADMIN' ,'CLIENT':'ROLE_CLIENT'} } }
+          - roles
+      list:
+        item_permission: 'ROLE_SUPER_ADMIN'
+        actions:
+          - { name: 'show', label: '', icon: 'search' }
+          - { name: 'edit', label: '', icon: 'edit' }
+          - { name: 'delete', label: '', icon: 'trash' }
+        fields:
+          - username
+          - email
+          - password
+          - phoneNumber
+          - enabled
+          - lastLogin
+          - roles
+
+    Commande:
+      label: Commande
+      class: App\Entity\Commande
+      item_permission: 'ROLE_CLIENT'
+      list:
+        actions:
+          - { name: 'show', label: '', icon: 'search' }
+          - { name: 'edit', label: '', icon: 'edit' }
+          - { name: 'delete', label: '', icon: 'trash' }
+        fields:
+          - orderList
+          - client
+          - total
+          - restaurant
+      new:
+        fields:
+          - orderList
+          - client
+          - total
+          - restaurant
+    # Categorie:
+    #   class: App\Entity\Categorie
+    #   list:
+    #     actions:
+    #       - { name: 'show', label: '', icon: 'search' }
+    #       - { name: 'edit', label: '', icon: 'edit' }
+    #       - { name: 'delete', label: '', icon: 'trash' }
+    #     fields:
+    #       - nom
+    #     new:
+    #       fields:
+    #         nom
