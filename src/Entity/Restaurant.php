@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -54,11 +55,6 @@ class Restaurant
     private $commandes;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Menu", mappedBy="restaurant")
-     */
-    private $menus;
-
-    /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="restaurant", cascade={"persist", "remove"})
      */
     private $administrateur;
@@ -77,7 +73,7 @@ class Restaurant
 
     /**
      * @ORM\Column(type="datetime")
-     * @var \DateTime
+     * @var DateTime
      */
     private $updatedAt;
 
@@ -85,7 +81,6 @@ class Restaurant
     public function __construct()
     {
         $this->commandes = new ArrayCollection();
-        $this->menus = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -189,34 +184,6 @@ class Restaurant
         return $this;
     }
 
-    /**
-     * @return Collection|Menu[]
-     */
-    public function getMenus(): Collection
-    {
-        return $this->menus;
-    }
-
-    public function addMenu(Menu $menu): self
-    {
-        if (!$this->menus->contains($menu)) {
-            $this->menus[] = $menu;
-            $menu->addRestaurant($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMenu(Menu $menu): self
-    {
-        if ($this->menus->contains($menu)) {
-            $this->menus->removeElement($menu);
-            $menu->removeRestaurant($this);
-        }
-
-        return $this;
-    }
-
     public function getAdministrateur(): ?User
     {
         return $this->administrateur;
@@ -233,7 +200,7 @@ class Restaurant
     {
         $this->imageFile = $image;
         if ($image) {
-            $this->updatedAt = new \DateTime('now');
+            $this->updatedAt = new DateTime('now');
         }
     }
 
@@ -250,17 +217,6 @@ class Restaurant
     public function getImage()
     {
         return $this->image;
-    }
-
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTime $datetime)
-    {
-        $this->updatedAt = $datetime;
-        return $this;
     }
 
 }

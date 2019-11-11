@@ -3,8 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
@@ -50,11 +49,6 @@ class Menu
     private $typeMenu;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Restaurant", inversedBy="menus")
-     */
-    private $restaurant;
-
-    /**
      * @ORM\Column(type="string", length=255)
      * @var string
      */
@@ -68,14 +62,23 @@ class Menu
 
     /**
      * @ORM\Column(type="datetime")
-     * @var \DateTime
+     * @var DateTime
      */
     private $updatedAt;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $quantite;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Restaurant", cascade={"persist", "remove"})
+     */
+    private $restaurant;
 
 
     public function __construct()
     {
-        $this->restaurant = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -148,37 +151,11 @@ class Menu
         return $this;
     }
 
-    /**
-     * @return Collection|Restaurant[]
-     */
-    public function getRestaurant(): Collection
-    {
-        return $this->restaurant;
-    }
-
-    public function addRestaurant(Restaurant $restaurant): self
-    {
-        if (!$this->restaurant->contains($restaurant)) {
-            $this->restaurant[] = $restaurant;
-        }
-
-        return $this;
-    }
-
-    public function removeRestaurant(Restaurant $restaurant): self
-    {
-        if ($this->restaurant->contains($restaurant)) {
-            $this->restaurant->removeElement($restaurant);
-        }
-
-        return $this;
-    }
-
     public function setImageFile(File $image = null)
     {
         $this->imageFile = $image;
         if ($image) {
-            $this->updatedAt = new \DateTime('now');
+            $this->updatedAt = new DateTime('now');
         }
     }
 
@@ -202,9 +179,33 @@ class Menu
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTime $datetime)
+    public function setUpdatedAt(DateTime $datetime)
     {
         $this->updatedAt = $datetime;
+        return $this;
+    }
+
+    public function getQuantite(): ?int
+    {
+        return $this->quantite;
+    }
+
+    public function setQuantite(int $quantite): self
+    {
+        $this->quantite = $quantite;
+
+        return $this;
+    }
+
+    public function getRestaurant(): ?Restaurant
+    {
+        return $this->restaurant;
+    }
+
+    public function setRestaurant(?Restaurant $restaurant): self
+    {
+        $this->restaurant = $restaurant;
+
         return $this;
     }
 

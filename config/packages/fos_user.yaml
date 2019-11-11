@@ -3,11 +3,14 @@ fos_user:
   firewall_name: main
   user_class: App\Entity\User
   service:
+    user_manager: fos_user.user_manager.default
     mailer: fos_user.mailer.twig_swift
   from_email:
     address: cobaye2019@gmail.com
     sender_name: Djiby Ndione
   registration:
+    form:
+      type: App\Form\RegistrationType
     confirmation:
       template: '@FOSUser/Registration/email.txt.twig'
       enabled: true

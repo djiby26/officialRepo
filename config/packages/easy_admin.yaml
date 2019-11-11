@@ -7,39 +7,30 @@ easy_admin:
     batch_actions: ['delete']
 
   design:
-   
+    assets:
+      favicon: 'assets/backend/graph.png'
     menu:
       - label: 'Mon Profile'
         icon: 'users'
         children:
+          - { label: 'Afficher mon profil', route: fos_user_profile_show }
           - { label: 'Modifier email', route: fos_user_profile_edit }
           - { label: 'Changer mot de passe' , route: fos_user_change_password }
       - { entity: Restaurant }
       - { entity: User , permission: 'ROLE_SUPER_ADMIN'}
       - { entity: Menu }
       - { entity: Commande }
+      - { entity: MenuAction }
     
     brand_color: '#fe8001'
     
     rtl: false
-  site_name: 'Management area'
+  site_name: 'Administration'
 
   entities:
-
     Restaurant:
       class: App\Entity\Restaurant
-      form:
-        form_options: { validation_groups: ['Default', 'my_validation_group'] }
-        item_permission: 'ROLE_SUPER_ADMIN'
-        fields:
-          - nom
-          - description
-          - adresse
-          - telephone
-          - { property: 'imageFile', type: 'vich_image', base_path: '%app.path.restaurant_images%',template: 'vich_uploader_image.html.twig' }
-          - menus
-          - horaire
-          - administrateur
+      controller: App\Controller\RestaurantController
       new:
         item_permission: 'ROLE_SUPER_ADMIN'
         title: 'Ajouter un restaurant'
@@ -48,10 +39,21 @@ easy_admin:
           - description
           - adresse
           - telephone
-          - { property: 'imageFile', type: 'vich_image', base_path: '%app.path.restaurant_images%',template: 'vich_uploader_image.html.twig' }
-          - menus
           - horaire
           - administrateur
+          - { property: 'imageFile', type: 'vich_image', base_path: '%app.path.restaurant_images%',template: 'vich_uploader_image.html.twig' }
+      form:
+        form_options: { validation_groups: ['Default', 'my_validation_group'] }
+        item_permission: 'ROLE_SUPER_ADMIN'
+        fields:
+          - nom
+          - description
+          - adresse
+          - telephone
+          - { property: 'imageFile', type: 'vich_image', base_path: '%app.path.restaurant_images%' }
+          - horaire
+          - administrateur
+
       edit:
         title: 'Modifier restaurant'
         fields:
@@ -60,21 +62,20 @@ easy_admin:
           - adresse
           - telephone
           - { property: 'imageFile', type: 'vich_image', base_path: '%app.path.restaurant_images%'}
-          - menus
           - horaire
           - administrateur
         list:
-          actions:
-            - { name: 'show', label: 'voir', icon: 'search' }
-            - { name: 'edit', label: 'modifier', icon: 'edit' }
-            - { name: 'delete', label: 'supprimer', icon: 'trash' }
+#          actions:
+#            - { name: 'show', label: 'voir', icon: 'search' }
+#            - { name: 'edit', label: 'modifier'}
+#            - { name: 'delete', label: 'supprimer'}
           fields:
+            - id
+            - { property: 'image', type: 'image', base_path: '%app.path.restaurant_images%' }
             - nom
             - description
             - adresse
             - telephone
-            - menus
-            - { property: 'image', type: 'image', base_path: '%app.path.restaurant_images%' }
             - horaire
             - administrateur
 
@@ -89,7 +90,8 @@ easy_admin:
           - typeMenu
           - etat
           - { property: 'imageFile', type: 'vich_image', base_path: '%app.path.restaurant_images%',template: 'vich_uploader_image.html.twig' }
-          - restaurant
+          - quantite
+          - { property: 'restaurant' ,  }
       edit:
         title: 'Modifier un menu'
         fields:
@@ -99,20 +101,22 @@ easy_admin:
           - typeMenu
           - etat
           - { property: 'imageFile', type: 'vich_image', base_path: '%app.path.restaurant_images%',template: 'vich_uploader_image.html.twig' }
+          - quantite
           - restaurant
       list:
         actions:
           - { name: 'show', label: 'voir', icon: 'search' }
-          - { name: 'edit', label: 'modifier', icon: 'edit' }
-          - { name: 'delete', label: 'supprimer', icon: 'trash' }
+          - { name: 'edit', label: 'modifier' }
+          - { name: 'delete', label: 'supprimer' }
         fields:
         - id
+        - { property: 'image', type: 'image', base_path: '%app.path.restaurant_images%' }
         - nom
         - detail
         - prix
         - typeMenu
         - { property: 'etat', label: 'Disponibilite'}
-        - { property: 'image', type: 'image', base_path: '%app.path.restaurant_images%' }
+        - quantite
         - restaurant
     
     User:
@@ -135,12 +139,11 @@ easy_admin:
         item_permission: 'ROLE_SUPER_ADMIN'
         actions:
           - { name: 'show', label: 'voir', icon: 'search' }
-          - { name: 'edit', label: 'modifier', icon: 'edit' }
-          - { name: 'delete', label: 'supprimer', icon: 'trash' }
+          - { name: 'edit', label: 'modifier'}
+          - { name: 'delete', label: 'supprimer'}
         fields:
           - username
           - email
-          - password
           - phoneNumber
           - enabled
           - lastLogin
@@ -153,8 +156,8 @@ easy_admin:
       list:
         actions:
           - { name: 'show', label: 'voir', icon: 'search' }
-          - { name: 'edit', label: 'modifier', icon: 'edit' }
-          - { name: 'delete', label: 'supprimer', icon: 'trash' }
+          - { name: 'edit', label: 'modifier' }
+          - { name: 'delete', label: 'supprimer' }
         fields:
           - orderList
           - client
@@ -166,3 +169,10 @@ easy_admin:
           - client
           - total
           - restaurant
+
+    MenuAction:
+      class: App\Entity\MenuAction
+      list:
+        fields:
+          - user
+  
