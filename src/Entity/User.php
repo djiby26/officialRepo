@@ -2,14 +2,18 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
+ * @Vich\Uploadable
  */
 class User extends BaseUser
 {
@@ -34,6 +38,24 @@ class User extends BaseUser
      * @ORM\OneToOne(targetEntity="App\Entity\Restaurant", mappedBy="administrateur", cascade={"persist", "remove"})
      */
     private $restaurant;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @var string
+     */
+    private $avatar;
+
+    /**
+     * @Vich\UploadableField(mapping="restaurant_images", fileNameProperty="avatar")
+     * @var File
+     */
+    private $avatarFile;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @var DateTime
+     */
+    private $updatedAt;
 
     public function __construct()
     {
@@ -106,6 +128,31 @@ class User extends BaseUser
         }
 
         return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(string $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    public function setAvatarFile(File $avatar = null)
+    {
+        $this->avatarFile = $avatar;
+        if ($avatar) {
+            $this->updatedAt = new DateTime('now');
+        }
+    }
+
+    public function getAvatarFile()
+    {
+        return $this->avatarFile;
     }
 }
  

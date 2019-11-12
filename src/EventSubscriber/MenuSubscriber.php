@@ -14,11 +14,9 @@ class MenuSubscriber implements EventSubscriberInterface
 {
     private $security;
 
-
     public function __construct(Security $security)
     {
         $this->security = $security;
-
     }
 
     public static function getSubscribedEvents()

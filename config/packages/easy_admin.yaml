@@ -1,5 +1,10 @@
 easy_admin:
 
+  user:
+    display_name: true
+    display_avatar: true
+    name_property_path: 'username'
+    avatar_property_path: 'avatar'
   formats:
     number: '%.00f'
 
@@ -11,13 +16,13 @@ easy_admin:
       favicon: 'assets/backend/graph.png'
     menu:
       - label: 'Mon Profile'
-        icon: 'users'
+        icon: 'user-circle-o'
         children:
           - { label: 'Afficher mon profil', route: fos_user_profile_show }
           - { label: 'Modifier email', route: fos_user_profile_edit }
           - { label: 'Changer mot de passe' , route: fos_user_change_password }
       - { entity: Restaurant }
-      - { entity: User , permission: 'ROLE_SUPER_ADMIN'}
+      - { entity: User , permission: 'ROLE_SUPER_ADMIN' ,icon: 'users'}
       - { entity: Menu }
       - { entity: Commande }
       - { entity: MenuAction }
@@ -25,12 +30,12 @@ easy_admin:
     brand_color: '#fe8001'
     
     rtl: false
-  site_name: 'Administration'
+  site_name: ' Administration'
 
   entities:
     Restaurant:
       class: App\Entity\Restaurant
-      controller: App\Controller\RestaurantController
+#      controller: App\Controller\RestaurantController
       new:
         item_permission: 'ROLE_SUPER_ADMIN'
         title: 'Ajouter un restaurant'
@@ -61,9 +66,10 @@ easy_admin:
           - description
           - adresse
           - telephone
-          - { property: 'imageFile', type: 'vich_image', base_path: '%app.path.restaurant_images%'}
           - horaire
           - administrateur
+          - { property: 'imageFile', type: 'vich_image', base_path: '%app.path.restaurant_images%'}
+          
         list:
 #          actions:
 #            - { name: 'show', label: 'voir', icon: 'search' }
@@ -124,6 +130,7 @@ easy_admin:
       label: Utilisateur
       class: App\Entity\User
       batch_actions: ['-delete']
+      role: 'ROLE_SUPER_ADMIN'
       form:
         item_permission: 'ROLE_SUPER_ADMIN'
         fields:
