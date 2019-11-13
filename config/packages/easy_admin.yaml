@@ -25,7 +25,7 @@ easy_admin:
       - { entity: User , permission: 'ROLE_SUPER_ADMIN' ,icon: 'users'}
       - { entity: Menu }
       - { entity: Commande }
-      - { entity: MenuAction }
+      - { entity: MenuAction , permission: 'ROLE_SUPER_ADMIN'}
     
     brand_color: '#fe8001'
     
@@ -69,7 +69,7 @@ easy_admin:
           - horaire
           - administrateur
           - { property: 'imageFile', type: 'vich_image', base_path: '%app.path.restaurant_images%'}
-          
+
         list:
 #          actions:
 #            - { name: 'show', label: 'voir', icon: 'search' }
@@ -159,7 +159,6 @@ easy_admin:
     Commande:
       label: Commande
       class: App\Entity\Commande
-      item_permission: 'ROLE_CLIENT'
       list:
         actions:
           - { name: 'show', label: 'voir', icon: 'search' }
@@ -171,6 +170,7 @@ easy_admin:
           - total
           - restaurant
       new:
+        item_permission: 'ROLE_SUPER_ADMIN'
         fields:
           - orderList
           - client
