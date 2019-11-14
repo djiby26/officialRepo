@@ -57,6 +57,41 @@ class User extends BaseUser
      */
     private $updatedAt;
 
+    /**
+     * Date/Time of the last activity
+     *
+     * @var \Datetime
+     * @ORM\Column(name="last_activity_at", type="datetime")
+     */
+    protected $lastActivityAt;
+
+    /**
+     * @param \Datetime $lastActivityAt
+     */
+    public function setLastActivityAt($lastActivityAt)
+    {
+        $this->lastActivityAt = $lastActivityAt;
+    }
+
+    /**
+     * @return \Datetime
+     */
+    public function getLastActivityAt()
+    {
+        return $this->lastActivityAt;
+    }
+
+    /**
+     * @return Bool Whether the user is active or not
+     */
+    public function isActiveNow()
+    {
+        // Delay during wich the user will be considered as still active
+        $delay = new \DateTime('2 minutes ago');
+
+        return ( $this->getLastActivityAt() > $delay );
+    }
+
     public function __construct()
     {
         parent::__construct();

@@ -5,6 +5,7 @@ namespace App\EventSubscriber;
 use App\Entity\Menu;
 use App\Entity\MenuAction;
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -13,16 +14,18 @@ use Symfony\Component\Security\Core\Security;
 class MenuSubscriber implements EventSubscriberInterface
 {
     private $security;
+    private $em;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security , EntityManagerInterface $em)
     {
         $this->security = $security;
+        $this->em = $em;
     }
 
     public static function getSubscribedEvents()
     {
         return [
-            EasyAdminEvents:: POST_NEW => ['onPreNew'],
+            EasyAdminEvents:: PRE_NEW => [['onPreNew' , 20]],
         ];
     }
 
@@ -37,6 +40,7 @@ class MenuSubscriber implements EventSubscriberInterface
                 return null;
             }
             $menuAction->setUsername($username);
+            $this->em->flush($menuAction);
         }
     }
 }

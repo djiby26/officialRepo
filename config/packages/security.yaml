@@ -22,10 +22,8 @@ security:
             anonymous: ~
             form_login:
                 check_path: /api/login_check
-                provider: fos_userbundle
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-                default_target_path: /api
             logout:
                 target: api/login
             guard:
@@ -50,7 +48,7 @@ security:
                  target: /login
              guard:
                  authenticators:
-                     - App\Security\LoginAuthenticator
+                    - lexik_jwt_authentication.jwt_token_authenticator
 
     access_control:
       - { path: ^/admin, roles: 'IS_AUTHENTICATED_FULLY' }

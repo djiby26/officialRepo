@@ -3,6 +3,10 @@ api_platform:
         paths: ['%kernel.project_dir%/src/Entity']
     patch_formats:
         json: ['application/merge-patch+json']
+    error_formats:
+        jsonproblem: ['application/problem+json']
+        jsonld:      ['application/ld+json']      # Hydra error formats
+        jsonapi:     ['application/vnd.api+json']
     swagger:
         versions: [3]
     enable_fos_user: true
