@@ -38,9 +38,19 @@ class Commande
      */
     private $client;
 
+    /**
+     * @ORM\Column(type="time", nullable=true)
+     */
+    private $retrieveTime;
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function __toString()
+    {
+        return $this->restaurant;
     }
 
     public function getOrderList(): ?array
@@ -87,6 +97,18 @@ class Commande
     public function setClient(?User $client): self
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getRetrieveTime(): ?\DateTimeInterface
+    {
+        return $this->retrieveTime;
+    }
+
+    public function setRetrieveTime(?\DateTimeInterface $retrieveTime): self
+    {
+        $this->retrieveTime = $retrieveTime;
 
         return $this;
     }

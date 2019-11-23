@@ -8,6 +8,7 @@
         "api-platform/api-pack": "^1.2",
         "doctrine/doctrine-migrations-bundle": "^2.0",
         "easycorp/easyadmin-bundle": "^2.3",
+        "endroid/qr-code-bundle": "^3.3",
         "gesdinet/jwt-refresh-token-bundle": "^0.8.2",
         "lexik/jwt-authentication-bundle": "^2.6",
         "symfony/asset": "4.3.*",

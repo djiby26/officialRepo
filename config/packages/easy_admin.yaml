@@ -168,7 +168,8 @@ easy_admin:
           - orderList
           - client
           - total
-          - restaurant
+          - { property: 'restaurant' , type_options: 'disabled' }
+          - retrieveTime
       new:
         item_permission: 'ROLE_SUPER_ADMIN'
         fields:
@@ -176,6 +177,7 @@ easy_admin:
           - client
           - total
           - restaurant
+          - retrieveTime
 
     MenuAction:
       class: App\Entity\MenuAction

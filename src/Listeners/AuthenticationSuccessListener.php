@@ -25,16 +25,28 @@ class AuthenticationSuccessListener {
      */
     public function onAuthenticationSuccess(AuthenticationSuccessEvent $event){
         /** @var JWTAuthenticationSuccessResponse $response */
+       
         $response = $event->getResponse();
         $data = $event->getData();
         $tokenJWT = $data['token'];
-        unset($data['token']);
-        unset($data['refresh_token']);
-        $event->setData($data);
+        // unset($data['token']);
+        // unset($data['refresh_token']);
+        // $event->setData($data);
+         $event->setData([
+            'content' => $event->getResponse()->getContent(),   
+            'code' => $event->getResponse()->getStatusCode(),
+            'username' => $event->getUser()->getUsername(),
+            'token' => $data['token'],
+            'refresh_token' => $data['refreshToken']
+        ]);
 
         $response->headers->setCookie(new Cookie('BEARER', $tokenJWT, (
         new \DateTime())
             ->add(new \DateInterval('PT' . $this->jwtTokenTTL . 'S')), '/', null, $this->cookieSecure));
+
+        // $response->headers->setCookie(new Cookie('BEARER', $tokenJWT, (
+        // new \DateTime())
+        //     ->add(new \DateInterval('PT' . $this->jwtTokenTTL . 'S')), '/', null, $this->cookieSecure));
 
         return $response;
     }
